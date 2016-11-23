@@ -1,0 +1,56 @@
+<div class="well">
+    <div class="text-center titre">
+        <h2>{{oeuvreCtrl.pageTitle}}</h2>
+    </div>
+    <form class="form-horizontal" role="form" name="oeuvreForm" >
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Titre</label>
+            <div class="col-sm-6  col-md-5">
+                <input type="text" name="name" ng-model="oeuvreCtrl.oeuvre.titre" 
+                       class="form-control" placeholder="Titre de l'oeuvre" required autofocus>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Prix</label>
+            <div class="col-sm-6 col-md-2">
+                <input type="currency" name="prix" ng-model="oeuvreCtrl.oeuvre.prix" 
+                       class="form-control" placeholder="Prix de l'oeuvre" required>
+            </div>
+        </div>     
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Propriétaire</label>
+            <div class="col-sm-6 col-md-3">
+                <select class='form-control' name='proprietaires' required
+                        ng-options="option.nom_proprietaire for option in oeuvreCtrl.proprietaire track by option.id_proprietaire"
+                        ng-model="oeuvreCtrl.selectedOptionProprio">
+                    <option value=''>Sélectionnez un propriétaire</option>
+                </select>
+            </div>
+        </div>
+     
+        <div class="form-group">
+            <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
+                <button type="submit" class="btn btn-default btn-primary" 
+                        ng-click="oeuvreCtrl.validateOeuvre(oeuvreCtrl.oeuvre.oeuvre_id, oeuvreForm)">
+                    <span class="glyphicon glyphicon-ok"></span>
+                    Valider              
+                </button>
+                &nbsp;
+                <button type="button" class="btn btn-default btn-primary" ng-click="oeuvreCtrl.cancel()">
+                    <span class="glyphicon glyphicon-remove"></span>
+                    Annuler
+                </button>
+            </div>           
+        </div>
+        <div class="form-group" >
+            <div class="col-sm-6 col-sm-offset-3" ng-show="oeuvreCtrl.error" >
+                <div class="alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    Erreurs!
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>

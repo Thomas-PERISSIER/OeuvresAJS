@@ -1,0 +1,32 @@
+<div>
+    <h1 class="text-center">Catalogue des oeuvres</h1>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Prix</th>
+                <th>Prénom propriétaire</th>
+                <th>Nom propriétaire</th>
+                <th>Réserver</th>
+                <th>Modifier</th>
+                <th>Supprimer</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="oeuvre in oeuvresCtrl.oeuvres">
+                <td>{{ oeuvre.titre}}</td>
+                <td>{{ oeuvre.prix}}</td>
+                <td>{{ oeuvre.proprietaire.prenom_proprietaire}}</td>
+                <td>{{ oeuvre.proprietaire.nom_proprietaire}}</td>     
+                <td><a class="btn btn-primary" href="#/reserverOeuvre/{{oeuvre.id_oeuvre}}">Réserver</a></td>
+                <td><a class="btn btn-primary" href="#/updateOeuvre/{{oeuvre.id_oeuvre}}">Modifier</a></td>
+                <td>
+                    <button class="btn btn-primary" confirm_click="oeuvresCtrl.deleteOeuvre(oeuvre.id_oeuvre)" 
+                            ng-confirm-box-click="Souhaitez-vous confirmer la suppression ?">
+                        Supprimer
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
