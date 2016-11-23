@@ -1,0 +1,7 @@
+http://debian-epul.univ-lyon1.fr:8180/OeuvresJDBC/
+login: auchon
+mdp: paul
+
+Objectifs :
+- Refaire le front-end du site en angular js.
+- Utiliser le back-end OeuvresRestFul comme webService.
