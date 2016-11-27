@@ -6,7 +6,7 @@
  * des modules internes (ceux qu'on a développés)
  */
 
-var app = angular.module('app', ['ngRoute', 'ngAnimate', 'ui.bootstrap', 'controllers', 'services']);
+var app = angular.module('app', ['ngRoute', 'ngAnimate', 'ui.bootstrap', 'controllers', 'services', 'directives']);
 
 /**
  * Définition des constantes de configuration et injection des modules
@@ -39,11 +39,18 @@ app.config(['$routeProvider',
                     templateUrl: 'partials/oeuvre.html',
                     controller: 'OeuvreCtrl as oeuvreCtrl'
                 })
+                .when('/reserverOeuvre/:id', {
+                    templateUrl: 'partials/reservation.html',
+                    controller: 'ReservationCtrl as reservationCtrl'
+                })
                 .when('/getReservations', {
-                    redirectTo: '/home'
+                    templateUrl: 'partials/reservations.html',
+                    controller: 'ReservationsCtrl as reservationsCtrl'
                 })
                 .otherwise({
                     redirectTo: '/home'
                 });
+                
     }
 ]);
+

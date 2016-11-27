@@ -9,11 +9,16 @@ services.factory('Config', [function () {
     return {
         urlServer: 'http://localhost:8080/OeuvresRestFul/webresources/webservices',
         urlGetOeuvres: '/getOeuvres',
-        urlGetOeuvre: '/getOeuvre',
+        urlGetOeuvre: '/getOeuvre/',
         urlGetProprietaires: '/getProprietaires',
         urlUpdateOeuvre: '/modifierOeuvre',
         urlAddOeuvre: '/ajouterOeuvre',
-        urlDeleteOeuvre: '/deleteOeuvre'
+        urlDeleteOeuvre: '/supprimerOeuvre/',
+        urlGetAdherents: '/getAdherents',
+        urlAddReservation:'/ajouterReservation',
+        urlGetReservations: '/getReservations',
+        urlDeleteReservation:'/supprimerReservation/',
+        urlConfirmReservation:'/confirmerReservation/'
     };
 }]);
 
@@ -32,7 +37,12 @@ function ($http, Config) {
         getProprietaires:getProprietaires,
         updateOeuvre:updateOeuvre,
         addOeuvre:addOeuvre,
-        deleteOeuvre:deleteOeuvre
+        deleteOeuvre:deleteOeuvre,
+        getAdherents:getAdherents,
+        addReservation:addReservation,
+        getReservations:getReservations,
+        deleteReservation:deleteReservation,
+        confirmReservation:confirmReservation
     };
     return oeuvreRest;
     
@@ -41,8 +51,8 @@ function ($http, Config) {
         return $http.get(url);
     }
     
-    function getOeuvre() {
-        var url = Config.urlServer + Config.urlGetOeuvre;
+    function getOeuvre(id) {
+        var url = Config.urlServer + Config.urlGetOeuvre+id;
         return $http.get(url);
     }
     
@@ -63,6 +73,31 @@ function ($http, Config) {
 
     function deleteOeuvre(id) {
         var url = Config.urlServer + Config.urlDeleteOeuvre + id;
+        return $http.get(url);
+    }
+    
+    function getAdherents() {
+        var url = Config.urlServer + Config.urlGetAdherents;
+        return $http.get(url);
+    }
+    
+    function addReservation(reservation) {
+        var url = Config.urlServer + Config.urlAddReservation;
+        return $http.post(url, reservation);
+    }
+    
+    function getReservations() {
+        var url = Config.urlServer + Config.urlGetReservations;
+        return $http.get(url);
+    }
+    
+    function deleteReservation(idOeuvre, dateReservation) {
+        var url = Config.urlServer + Config.urlDeleteReservation + idOeuvre+'-'+dateReservation;
+        return $http.get(url);
+    }
+    
+    function confirmReservation(idOeuvre, dateReservation) {
+        var url = Config.urlServer + Config.urlConfirmReservation + idOeuvre+'-'+dateReservation;
         return $http.get(url);
     }
 }]);

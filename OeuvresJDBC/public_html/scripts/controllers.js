@@ -94,7 +94,7 @@ controllers.controller('OeuvresCtrl', ['OeuvresRest', '$route', '$location',
         
         function deleteOeuvre(id) {
             if (id) {
-                OeuvresRest.supprimerOeuvre(id).success(function (data, status) {
+                OeuvresRest.deleteOeuvre(id).success(function (data, status) {
                     if (status === 200) {
                         $location.path('/getOeuvres');
                         $route.reload();
@@ -165,15 +165,18 @@ controllers.controller('OeuvreCtrl', ['OeuvresRest', '$routeParams', '$location'
                 var oeuvre = oeuvreCtrl.oeuvre;
 
                 // La marque décimale doit être le point
-                oeuvre.prix = oeuvreCtrl.oeuvre.prix.replace(',', '.');
-                
+                if(typeof oeuvre.prix === 'string' || oeuvre.prix instanceof String){
+                     var prix = oeuvreCtrl.oeuvre.prix.replace(',', '.');
+                     oeuvre.prix = Number(prix.replace(/[^0-9\.]+/g,""));
+                }
+ 
                 // Récupération du propriétaire sélectionné
-                oeuvre.proprietaire = oeuvreCtrl.selectedOptionProprio;
+                oeuvre.id_proprietaire = oeuvreCtrl.selectedOptionProprio.id_proprietaire;
 
                 // si on a un id => c'est une modification
                 if (id) {
                     // Demande de mise à jour de l'oeuvre
-                    OeuvresRest.modifierOeuvre(oeuvre).success(function (data, status) {
+                    OeuvresRest.updateOeuvre(oeuvre).success(function (data, status) {
                         // Si c'est OK on consulte la nouvelle liste des oeuvres
                         // Sinon on affiche l'erreur
                         if (status === 200) {
@@ -186,8 +189,9 @@ controllers.controller('OeuvreCtrl', ['OeuvresRest', '$routeParams', '$location'
                 }
                 // Sinon c'est la création d'une nouvelle oeuvre
                 else {
+                    oeuvre.id_oeuvre=0;
                     // Demande d'ajout de l'oeuvre
-                    OeuvresRest.ajouterOeuvre(oeuvre).success(function (data, status) {
+                    OeuvresRest.addOeuvre(oeuvre).success(function (data, status) {
                         // Si c'est OK on consulte la nouvelle liste des oeuvres
                         // Sinon on affiche l'erreur
                         if (status === 200) {
@@ -202,5 +206,146 @@ controllers.controller('OeuvreCtrl', ['OeuvresRest', '$routeParams', '$location'
                 oeuvreCtrl.error = "Le formulaire n'est pas correct";
             }
         }
+    }
+]);
+
+controllers.controller('ReservationCtrl', ['OeuvresRest', '$routeParams', '$location',
+    function (OeuvresRest, $routeParams, $location) {
+        // Définition du scope
+        var reservationCtrl = this;
+        // On référence les méthodes exposées
+        reservationCtrl.validateReservation = validateReservation;
+        reservationCtrl.cancel = cancel;
+                
+        // Récupère la liste des adherents
+        OeuvresRest.getAdherents().success(function (data) {
+            reservationCtrl.adherents = data;
+        });
+    
+        // le datepicker n'est pas visible
+        reservationCtrl.date_reservation= new Date();
+        reservationCtrl.datePickerOpened = false;
+        // Affiche le datepicker
+        reservationCtrl.openDatePicker = function () {
+            reservationCtrl.datePickerOpened = true;
+        };      
+        
+        reservationCtrl.oeuvre_id = $routeParams.id;
+        var oeuvreR = OeuvresRest.getOeuvre($routeParams.id);
+        oeuvreR.success(function (data, status) {
+            if (status === 200) {
+                reservationCtrl.oeuvre = data;
+            }
+        }).error(function (data) {
+            reservationCtrl.error = data;
+            alert(reservationCtrl.error);
+        });
+        
+        // On a cliqué sur le bouton Annuler
+        function cancel() {
+            $location.path('/getOeuvres');
+        }
+        
+        /**
+        * On a cliqué sur le bouton valider
+        * @param {type} form : le formulaire complet
+        */
+        function validateReservation(form) {
+            // Si tout a été saisi, pas de zone oubliée
+            if (form.$valid) {
+                var reservation={};
+                 
+                reservation.id_oeuvre = parseInt(reservationCtrl.oeuvre_id, 10);
+                
+                // On récupère la date au format MySQL
+                var date = reservationCtrl.date_reservation;
+                var annee =date.getFullYear();
+                var mois=date.getMonth()+1;
+                var jour=date.getDate();
+                reservation.date_reservation = annee+'-'+mois+'-'+jour;
+                
+                // Récupération de l'adhérent sélectionné
+                reservation.id_adherent = reservationCtrl.selectedOptionAdherent.id_adherent;
+
+                // Création de la réservation
+                OeuvresRest.addReservation(reservation).success(function (data, status) {
+                    // Si c'est OK on consulte la nouvelle liste des oeuvres
+                    // Sinon on affiche l'erreur
+                    if (status === 200) {
+                        $location.path('/getOeuvres');
+                    }
+                }).error(function (data) {
+                    reservationCtrl.error = data;
+                    alert(reservationCtrl.error);
+                });
+                
+            } else { // On affiche un message d'erreur type
+                reservationCtrl.error = "Le formulaire n'est pas correct";
+            }
+        }
+    }
+]);
+
+controllers.controller('ReservationsCtrl', ['OeuvresRest', '$route', '$location',
+    function (OeuvresRest, $route, $location) {
+        var reservationsCtrl = this;
+        reservationsCtrl.deleteReservation = deleteReservation;
+        reservationsCtrl.confirmReservation = confirmReservation;      
+        
+        // Récupère une promise
+        // On référence les méthodes exposées
+        var reservationsPromise = OeuvresRest.getReservations();
+        
+        // Si la requête aboutit (code 200) on affecte le jSon retourné
+        // à la variable reservationsCtrl.reservations qui sera affichée
+        // par la vue reservations.html
+        reservationsPromise.success(function (data) {
+            if (data.length > 0) // si la liste n'est pas vide
+                reservationsCtrl.reservations = data;
+        }).error(function (data) { // Si la requête a provoqué une erreur (ex. 404)
+            reservationsCtrl.error = data; // On affiche l'erreur brute,
+            alert(reservationsCtrl.error);
+        });
+        
+        /**
+         * Suppression d'une réservation
+         * @param {type} id de l'oeuvre
+         * @param {type} date de la réservation
+         */
+        
+        function deleteReservation(idOeuvre, dateReservation) {
+            if (idOeuvre && dateReservation) {
+                OeuvresRest.deleteReservation(idOeuvre, dateReservation).success(function (data, status) {
+                    if (status === 200) {
+                        $location.path('/getReservations');
+                        $route.reload();
+                    }
+                }).error(function (data) {
+                   reservationsCtrl.error = data;
+                   alert(reservationsCtrl.error);
+                });
+            }
+        }
+        
+        /**
+         * Confirmation d'une réservation
+         * @param {type} id de l'oeuvre
+         * @param {type} date de la réservation
+         */
+        
+        function confirmReservation(idOeuvre, dateReservation) {
+            if (idOeuvre && dateReservation) {
+                OeuvresRest.confirmReservation(idOeuvre, dateReservation).success(function (data, status) {
+                    if (status === 200) {
+                        $location.path('/getReservations');
+                        $route.reload();
+                    }
+                }).error(function (data) {
+                   reservationsCtrl.error = data;
+                   alert(reservationsCtrl.error);
+                });
+            }
+        }
+        
     }
 ]);
