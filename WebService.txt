@@ -5,3 +5,6 @@ mdp: paul
 Objectifs :
 - Refaire le front-end du site en angular js.
 - Utiliser le back-end OeuvresRestFul comme webService.
+
+readme.txt
+explicationns : changement dans oeuvresRestFul

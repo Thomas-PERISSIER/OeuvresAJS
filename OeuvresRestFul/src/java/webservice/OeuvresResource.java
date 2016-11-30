@@ -51,21 +51,46 @@ public class OeuvresResource {
         return oeuvre.liste();
     }
 
+//    @GET
+//    @Path("getOeuvre/{id_oeuvre}")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Oeuvre getOeuvre(@PathParam("id_oeuvre") int id_oeuvre) throws Exception {
+//        Oeuvre oeuvre = new Oeuvre();
+//        oeuvre = oeuvre.lire(id_oeuvre);
+//        return oeuvre;
+//    }
+    
+    /**
+     * Version complète de getOeuvre retournant une Response incluant
+     * soit un objet Oeuvre au format jSon et un code de retour 200, 
+     * soit le message d'erreur issu de l'Exception au format jSon en cas 
+     * de problèmeet un code 500
+     * @param id_oeuvre : id de l'Oeuvre à lire
+     * @return : Response
+     * @throws Exception 
+     */
     @GET
     @Path("getOeuvre/{id_oeuvre}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Oeuvre getOeuvre(@PathParam("id_oeuvre") int id_oeuvre) throws Exception {
-        Oeuvre oeuvre = new Oeuvre();
-        oeuvre.lire_Id(id_oeuvre);
-        return oeuvre;
-    }
+    public Response getOeuvre(@PathParam("id_oeuvre") int id_oeuvre) throws Exception {
+        Response response = null;
+        try{
+            Oeuvre oeuvre = new Oeuvre();    
+            oeuvre = oeuvre.lire(id_oeuvre);
+            response = Response.status(Response.Status.OK).entity(oeuvre).build();
+        }catch(Exception ex){
+            JsonObject retour = Json.createObjectBuilder().add("message", ex.getMessage()).build();
+            response = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(retour).build();
+        }
+        return response;
+    }    
 
     @GET
     @Path("getProprietaire/{id_proprietaire}")
     @Produces(MediaType.APPLICATION_JSON)
     public Proprietaire getProprietaire(@PathParam("id_proprietaire") int id_proprietaire) throws Exception {
         Proprietaire proprietaire = new Proprietaire();
-        proprietaire.lire_Id(id_proprietaire);
+        proprietaire.lire(id_proprietaire);
         return proprietaire;
     }
 
@@ -75,7 +100,7 @@ public class OeuvresResource {
     public Reservation getReservation(@PathParam("id_oeuvre") int id_oeuvre, @PathParam("date_reserv") String date_reserv) throws Exception {
         Reservation reservation = new Reservation();
         Date date_reservation = Utilitaire.StrToDate(date_reserv, "yyyy-MM-dd");
-        reservation.lire_Id(id_oeuvre, date_reservation);
+        reservation.lire(id_oeuvre, date_reservation);
         return reservation;
     }
 
@@ -104,9 +129,9 @@ public class OeuvresResource {
     }
 
     @GET
-    @Path("getConnecter/{login}")
+    @Path("getConnexion/{login}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Proprietaire getConnecter(@PathParam("login") String login) throws Exception {
+    public Proprietaire getConnexion(@PathParam("login") String login) throws Exception {
         Proprietaire proprietaire = new Proprietaire();
         proprietaire.lire_Login(login);
         return (proprietaire);
@@ -118,7 +143,7 @@ public class OeuvresResource {
     public Response ajouterOeuvre(String oeuvreJson) throws Exception {
         JsonObject retour = Json.createObjectBuilder().add("message", "").build();
         Response response = null;
-        int codeRetour = 200;
+        int codeRetour = Response.Status.OK.getStatusCode();
         try {
             if (oeuvreJson != null) {
                 Oeuvre oeuvre = new Oeuvre();
@@ -127,35 +152,33 @@ public class OeuvresResource {
                 oeuvre.ajouter();
             }
         } catch (Exception ex) {
-            retour = Json.createObjectBuilder().add("messageErreur", ex.getMessage()).build();
-            codeRetour = 500;
+            String message = Utilitaire.GestException(ex);
+            retour = Json.createObjectBuilder().add("message",message).build();
+            codeRetour = Response.Status.INTERNAL_SERVER_ERROR.getStatusCode();
         } finally {
             response = Response.status(codeRetour).entity(retour).build();
-            return response;
         }
+        return response;
     }
 
     @POST
     @Path("modifierOeuvre")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response modifierOeuvre(String oeuvreJson) throws Exception {
-        JsonObject retour = Json.createObjectBuilder().add("message", "").build();
         Response response = null;
-        int codeRetour = 200;
         try {
             if (oeuvreJson != null) {
                 Oeuvre oeuvre = new Oeuvre();
                 JsonObject obj = convertJson(oeuvreJson);
                 oeuvre.setPropertiesFromJson(obj);
                 oeuvre.modifier();
+                response = Response.status(Response.Status.OK).build();
             }
         } catch (Exception ex) {
-            retour = Json.createObjectBuilder().add("messageErreur", ex.getMessage()).build();
-            codeRetour = 500;
-        } finally {
-            response = Response.status(codeRetour).entity(retour).build();
-            return response;
+            JsonObject retour = Json.createObjectBuilder().add("message", ex.getMessage()).build();
+            response = Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(retour).build();
         }
+        return response;
     }
 
     @POST
@@ -165,15 +188,15 @@ public class OeuvresResource {
     public Response modifierProprietaire(String proprietaireJson) {
         JsonObject retour = Json.createObjectBuilder().add("message", "").build();
         Response response = null;
-        int codeRetour = 200;
+        int codeRetour = Response.Status.OK.getStatusCode();
         try {
             Proprietaire proprietaire = new Proprietaire();
             JsonObject obj = convertJson(proprietaireJson);
             proprietaire.setPropertiesFromJson(obj);
             proprietaire.modifier();
         } catch (Exception ex) {
-            retour = Json.createObjectBuilder().add("messageErreur", ex.getMessage()).build();
-            codeRetour = 500;
+            retour = Json.createObjectBuilder().add("message", ex.getMessage()).build();
+            codeRetour = Response.Status.INTERNAL_SERVER_ERROR.getStatusCode();
         } finally {
             response = Response.status(codeRetour).entity(retour).build();
             return response;
@@ -187,15 +210,15 @@ public class OeuvresResource {
     public Response ajouterProprietaire(String proprietaireJson) {
         JsonObject retour = Json.createObjectBuilder().add("message", "").build();
         Response response = null;
-        int codeRetour = 200;
+        int codeRetour = Response.Status.OK.getStatusCode();
         try {
             Proprietaire proprietaire = new Proprietaire();
             JsonObject obj = convertJson(proprietaireJson);
             proprietaire.setPropertiesFromJson(obj);
             proprietaire.ajouter();
         } catch (Exception ex) {
-            retour = Json.createObjectBuilder().add("messageErreur", ex.getMessage()).build();
-            codeRetour = 500;
+            retour = Json.createObjectBuilder().add("message", ex.getMessage()).build();
+            codeRetour = Response.Status.INTERNAL_SERVER_ERROR.getStatusCode();
         } finally {
             response = Response.status(codeRetour).entity(retour).build();
             return response;
@@ -209,7 +232,7 @@ public class OeuvresResource {
     public Response ajouterReservation(String reservationJson) {
         JsonObject retour = Json.createObjectBuilder().add("message", "").build();
         Response response = null;
-        int codeRetour = 200;
+        int codeRetour = Response.Status.OK.getStatusCode();
         try {
             Reservation reservation = new Reservation();
             JsonObject obj = convertJson(reservationJson);
@@ -218,8 +241,8 @@ public class OeuvresResource {
             reservation.setId_oeuvre(obj.getInt("id_oeuvre"));
             reservation.ajouter();
         } catch (Exception ex) {
-            retour = Json.createObjectBuilder().add("messageErreur", ex.getMessage()).build();
-            codeRetour = 500;
+            retour = Json.createObjectBuilder().add("message", ex.getMessage()).build();
+            codeRetour = Response.Status.INTERNAL_SERVER_ERROR.getStatusCode();
         } finally {
             response = Response.status(codeRetour).entity(retour).build();
             return response;
@@ -232,15 +255,15 @@ public class OeuvresResource {
     public Response confirmerReservation(@PathParam("id_oeuvre") int id_oeuvre, @PathParam("date_reservation") String date_reservation) {
         JsonObject retour = Json.createObjectBuilder().add("message", "").build();
         Response response = null;
-        int codeRetour = 200;
+        int codeRetour = Response.Status.OK.getStatusCode();
         try {
             Reservation reservation = new Reservation();
             reservation.setId_oeuvre(id_oeuvre);
             reservation.setDate_reservation(Utilitaire.StrToDate(date_reservation, "yyyy-MM-dd"));            
             reservation.modifier();
         } catch (Exception ex) {
-            retour = Json.createObjectBuilder().add("messageErreur", ex.getMessage()).build();
-            codeRetour = 500;
+            retour = Json.createObjectBuilder().add("message", ex.getMessage()).build();
+            codeRetour = Response.Status.INTERNAL_SERVER_ERROR.getStatusCode();
         } finally {
             response = Response.status(codeRetour).entity(retour).build();
             return response;
@@ -253,15 +276,15 @@ public class OeuvresResource {
     public Response supprimerReservation(@PathParam("id_oeuvre") int id_oeuvre, @PathParam("date_reservation") String date_reservation) {
         JsonObject retour = Json.createObjectBuilder().add("message", "").build();
         Response response = null;
-        int codeRetour = 200;
+        int codeRetour = Response.Status.OK.getStatusCode();
         try {
             Reservation reservation = new Reservation();
             reservation.setId_oeuvre(id_oeuvre);
             reservation.setDate_reservation(Utilitaire.StrToDate(date_reservation, "yyyy-MM-dd"));   
             reservation.supprimer();
         } catch (Exception ex) {
-            retour = Json.createObjectBuilder().add("messageErreur", ex.getMessage()).build();
-            codeRetour = 500;
+            retour = Json.createObjectBuilder().add("message", ex.getMessage()).build();
+            codeRetour = Response.Status.INTERNAL_SERVER_ERROR.getStatusCode();
         } finally {
             response = Response.status(codeRetour).entity(retour).build();
             return response;
@@ -274,19 +297,24 @@ public class OeuvresResource {
     public Response supprimerOeuvre(@PathParam("id_oeuvre") int id_oeuvre) {
         JsonObject retour = Json.createObjectBuilder().add("message", "").build();
         Response response = null;
-        int codeRetour = 200;
+        int codeRetour = Response.Status.OK.getStatusCode();
         try {
             Oeuvre oeuvre = new Oeuvre(); 
             oeuvre.supprimer(id_oeuvre);
         } catch (Exception ex) {
-            retour = Json.createObjectBuilder().add("messageErreur", ex.getMessage()).build();
-            codeRetour = 500;
+            retour = Json.createObjectBuilder().add("message", ex.getMessage()).build();
+            codeRetour = Response.Status.INTERNAL_SERVER_ERROR.getStatusCode();
         } finally {
             response = Response.status(codeRetour).entity(retour).build();
             return response;
         }
     }
     
+    /**
+     * Convertit une chaîne au format jSon en un JsonObject
+     * @param s chaîne à convertir
+     * @return JsonObject
+     */
     private JsonObject convertJson(String s) {
         JsonReader jsonReader = Json.createReader(new StringReader(s));
         JsonObject jsonObject = jsonReader.readObject();

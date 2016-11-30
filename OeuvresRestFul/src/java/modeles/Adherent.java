@@ -39,7 +39,7 @@ public class Adherent {
      * @param id Id de l'adhérent à lire
      * @throws Exception
      */
-    public Adherent lire_Id(int id) throws Exception {
+    public Adherent lire(int id) throws Exception {
         PreparedStatement ps = null;
         ResultSet rs = null;
         Connection connection = null;

@@ -40,8 +40,8 @@ public class Reservation {
     public Reservation(int id_oeuvre, int id_adherent, java.util.Date date_reservation, String statut) throws Exception {
         setId_oeuvre(id_oeuvre);
         setId_adherent(id_adherent);
-        this.setAdherent(new Adherent().lire_Id(id_adherent));
-        this.setOeuvre(new Oeuvre().lire_Id(id_oeuvre));
+        this.setAdherent(new Adherent().lire(id_adherent));
+        this.setOeuvre(new Oeuvre().lire(id_oeuvre));
         this.setDate_reservation(date_reservation);
         this.setStatut(statut);
     }
@@ -102,7 +102,7 @@ public class Reservation {
      * @return
      * @throws Exception 
      */
-    public Reservation lire_Id(int id, java.util.Date date_reservation) throws Exception {
+    public Reservation lire(int id, java.util.Date date_reservation) throws Exception {
         PreparedStatement ps = null;
         ResultSet rs = null;
         Connection connection = null;
@@ -121,8 +121,8 @@ public class Reservation {
                 java.util.Date dateReservation = new java.util.Date(dbSqlDate.getTime());
                 setDate_reservation(dateReservation);
                 setStatut(rs.getString("statut"));
-                setAdherent(getAdherent().lire_Id(this.getId_adherent()));
-                setOeuvre(getOeuvre().lire_Id(this.getId_oeuvre()));
+                setAdherent(getAdherent().lire(this.getId_adherent()));
+                setOeuvre(getOeuvre().lire(this.getId_oeuvre()));
             } else {
                 throw new Exception("Réservation inconnue !");
             }
@@ -161,7 +161,7 @@ public class Reservation {
         try {
             Connexion cnx = new Connexion();
             connection = cnx.connecter();
-            ps = connection.prepareStatement("select * from reservation"); // where statut = 'Attente'");
+            ps = connection.prepareStatement("select * from reservation"); // where statut = 'Attente'
             rs = ps.executeQuery();
             while (rs.next()) {
                 int id_oeuvr = rs.getInt("id_oeuvre");
@@ -202,7 +202,7 @@ public class Reservation {
         Connection connection = null;
         try {
             Connexion cnx = new Connexion();
-            connection = cnx.connecter();
+            connection = cnx.connecter();    // Pour simuler une erreur grave mettre un nom de table erronné, par exemple reserv
             ps = connection.prepareStatement("update reservation set statut = 'Confirmée' where id_oeuvre = ? and date_reservation = ?");
             ps.setInt(1, getId_oeuvre());          
             java.sql.Date sqlDate = new java.sql.Date(getDate_reservation().getTime());

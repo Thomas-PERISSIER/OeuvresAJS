@@ -62,7 +62,7 @@ public class Proprietaire {
      * @param id Id du Propriétaire à lire
      * @throws Exception
      */
-    public Proprietaire lire_Id(int id) throws Exception {
+    public Proprietaire lire(int id) throws Exception {
         PreparedStatement ps = null;
         ResultSet rs = null;
         Connection connection = null;

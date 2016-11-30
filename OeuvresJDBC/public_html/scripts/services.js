@@ -8,7 +8,7 @@ var services = angular.module('services', []);
 services.factory('Config', [function () {
     return {
         urlServer: 'http://localhost:8080/OeuvresRestFul/webresources/webservices',
-        urlGetConnection:'/getConnecter/',
+        urlGetConnection:'/getConnexion/',
         urlGetOeuvres: '/getOeuvres',
         urlGetOeuvre: '/getOeuvre/',
         urlGetProprietaires: '/getProprietaires',

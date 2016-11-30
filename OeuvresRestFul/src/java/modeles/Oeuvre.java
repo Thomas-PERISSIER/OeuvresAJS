@@ -31,40 +31,51 @@ public class Oeuvre {
      * @throws Exception
      */
     public Oeuvre(int id_proprietaire) throws Exception {
-        setProprietaire(new Proprietaire().lire_Id(id_proprietaire));
+        setProprietaire(new Proprietaire().lire(id_proprietaire));
 
     }
+
     // <editor-fold desc="Propriétés">
     public int getId_oeuvre() {
         return id_oeuvre;
     }
+
     public void setId_oeuvre(int id_oeuvre) {
         this.id_oeuvre = id_oeuvre;
     }
+
     public int getId_proprietaire() {
         return id_proprietaire;
     }
+
     public void setId_proprietaire(int id_proprietaire) {
         this.id_proprietaire = id_proprietaire;
     }
+
     public Proprietaire getProprietaire() {
         return proprietaire;
     }
+
     public void setProprietaire(Proprietaire proprietaire) {
         this.proprietaire = proprietaire;
     }
+
     public String getTitre() {
         return titre;
     }
+
     public void setTitre(String titre) {
         this.titre = titre;
     }
+
     public double getPrix() {
         return prix;
     }
+
     public void setPrix(double prix) {
         this.prix = prix;
     }
+
     // </editor-fold>
     /**
      * Lecture d'une Oeuvre dans la base de données
@@ -72,7 +83,7 @@ public class Oeuvre {
      * @param id Id de l'oeuvre à lire
      * @throws Exception
      */
-    public Oeuvre lire_Id(int id) throws Exception {
+    public Oeuvre lire(int id) throws Exception {
         PreparedStatement ps = null;
         ResultSet rs = null;
         Connection connection = null;
@@ -147,7 +158,7 @@ public class Oeuvre {
             }
         }
     }
-    
+
     public void supprimer(int id_oeuvre) throws Exception {
         PreparedStatement ps = null;
         Connection connection = null;
@@ -171,7 +182,7 @@ public class Oeuvre {
                 e.printStackTrace();
             }
         }
-    }          
+    }
 
     /**
      * Met à jour une oeuvre dans la base de données
@@ -250,20 +261,24 @@ public class Oeuvre {
             setId_proprietaire(rs.getInt("id_proprietaire"));
             setTitre(rs.getString("titre"));
             setPrix(Double.parseDouble(rs.getString("prix")));
-            setProprietaire(getProprietaire().lire_Id(this.getId_proprietaire()));
+            setProprietaire(getProprietaire().lire(this.getId_proprietaire()));
         } catch (Exception e) {
             throw e;
         }
     }
 
-    public void setPropertiesFromJson(JsonObject jsonObject) {
-        this.setId_proprietaire(jsonObject.getInt("id_proprietaire"));
-        this.setId_oeuvre(jsonObject.getInt("id_oeuvre"));
+    public void setPropertiesFromJson(JsonObject jsonObject) throws Exception {
+        try {
+            this.setId_proprietaire(jsonObject.getInt("id_proprietaire"));
+            this.setId_oeuvre(jsonObject.getInt("id_oeuvre"));
 //        Proprietaire proprietaire = new Proprietaire();
 //        proprietaire.setPropertiesFromJson(jsonObject.getJsonObject("proprietaire"));
 //        this.setProprietaire(proprietaire);
-        JsonNumber jsonNumber = jsonObject.getJsonNumber("prix");
-        this.setPrix(jsonNumber.doubleValue());
-        this.setTitre(jsonObject.getString("titre"));
+            JsonNumber jsonNumber = jsonObject.getJsonNumber("prix");
+            this.setPrix(jsonNumber.doubleValue());
+            this.setTitre(jsonObject.getString("titre"));
+        } catch (Exception e) {
+            throw e;
+        }
     }
 }

@@ -274,8 +274,9 @@ controllers.controller('ReservationCtrl', ['OeuvresRest', '$routeParams', '$loca
                         $location.path('/getOeuvres');
                     }
                 }).error(function (data) {
-                    reservationCtrl.error = data.messageErreur;
-                    alert(reservationCtrl.error);
+                    if(data.message.includes('PRIMARY')){
+                        reservationCtrl.error = "L'oeuvre a déjà été réservée pour le "+jour+"/"+mois+"/"+annee;
+                    }
                 });
                 
             } else { // On affiche un message d'erreur type

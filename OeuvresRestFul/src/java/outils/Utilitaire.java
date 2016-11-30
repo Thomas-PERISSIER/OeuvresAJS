@@ -60,4 +60,17 @@ public class Utilitaire {
         }
         return date_retour;
     }
+    
+    public static String GestException(Exception ex) throws Exception {
+        String message = "";
+        try{
+            if (ex.getMessage() != null)
+                message = ex.getMessage();
+            else
+                message = "Erreur inconnue !";
+        }catch(Exception e){
+            
+        }
+        return message;
+    }
 }
