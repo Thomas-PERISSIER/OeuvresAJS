@@ -8,6 +8,7 @@ var services = angular.module('services', []);
 services.factory('Config', [function () {
     return {
         urlServer: 'http://localhost:8080/OeuvresRestFul/webresources/webservices',
+        urlGetConnection:'/getConnecter/',
         urlGetOeuvres: '/getOeuvres',
         urlGetOeuvre: '/getOeuvre/',
         urlGetProprietaires: '/getProprietaires',
@@ -106,7 +107,7 @@ function ($http, Config) {
  * Gestion de l'authentification
  */
 services.factory('Connection',
-        function () {
+        function ($http, Config) {
             // Expose la méthode getConnexion
             var connection = {
                 getConnection: getConnection
@@ -119,10 +120,8 @@ services.factory('Connection',
              * @param mdp
              * @returns {Boolean}
              */
-            function getConnection(login, mdp) {
-                var OK = false;
-                if ((login === "admin") && (mdp === "mdp"))
-                    OK = true;
-                return OK;
+            function getConnection(login) {
+                var url = Config.urlServer + Config.urlGetConnection+login;
+                return $http.get(url);
             }
         });

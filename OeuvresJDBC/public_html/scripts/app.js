@@ -6,8 +6,11 @@
  * des modules internes (ceux qu'on a développés)
  */
 
-var app = angular.module('app', ['ngRoute', 'ngAnimate', 'ui.bootstrap', 'controllers', 'services', 'directives']);
-
+var app = angular
+        .module('app', ['ngRoute', 'ngAnimate', 'ui.bootstrap', 'controllers', 'services', 'directives'])
+        .run(function($rootScope) {
+            $rootScope.CONFIRMEE ='Confirmée'
+         });
 /**
  * Définition des constantes de configuration et injection des modules
  * externes nécessaires : $routeProvider => routage

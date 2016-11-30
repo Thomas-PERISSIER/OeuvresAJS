@@ -161,7 +161,7 @@ public class Reservation {
         try {
             Connexion cnx = new Connexion();
             connection = cnx.connecter();
-            ps = connection.prepareStatement("select * from reservation where statut = 'Attente'");
+            ps = connection.prepareStatement("select * from reservation"); // where statut = 'Attente'");
             rs = ps.executeQuery();
             while (rs.next()) {
                 int id_oeuvr = rs.getInt("id_oeuvre");

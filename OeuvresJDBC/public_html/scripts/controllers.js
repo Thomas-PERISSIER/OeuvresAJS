@@ -48,7 +48,6 @@ controllers.controller('ConnectionCtrl', ['$rootScope', 'Connection', '$location
         // On référence les méthodes exposées
         connectionCtrl.signIn = signIn;
         connectionCtrl.login = "";
-        connectionCtrl.mdp = "";
         
         /**
         * Appelle le service Connection avec le login
@@ -57,9 +56,9 @@ controllers.controller('ConnectionCtrl', ['$rootScope', 'Connection', '$location
         * @param login
         * @param pwd
         */
-        function signIn(login, pwd) {
+        function signIn(login) {
             connectionCtrl.error = "";
-            $rootScope.isConnected = Connection.getConnection(login, pwd);
+            $rootScope.isConnected = Connection.getConnection(login);
             if ($rootScope.isConnected)
                 $location.path('/home');
             else
@@ -275,7 +274,7 @@ controllers.controller('ReservationCtrl', ['OeuvresRest', '$routeParams', '$loca
                         $location.path('/getOeuvres');
                     }
                 }).error(function (data) {
-                    reservationCtrl.error = data;
+                    reservationCtrl.error = data.messageErreur;
                     alert(reservationCtrl.error);
                 });
                 
