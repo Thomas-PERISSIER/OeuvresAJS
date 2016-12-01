@@ -54,7 +54,6 @@ controllers.controller('ConnectionCtrl', ['$rootScope', 'Connection', '$location
         * et le pwd. Si Ok redirige vers la page d'accueil
         * sinon affiche un message d'erreur dans la langue en cours
         * @param login
-        * @param pwd
         */
         function signIn(login) {
             connectionCtrl.error = "";
@@ -66,6 +65,12 @@ controllers.controller('ConnectionCtrl', ['$rootScope', 'Connection', '$location
         }
 }]);
 
+/**
+* Contrôleur de la page oeuvres.html
+* @param OeuvresRest
+* @param $route
+* @param $location
+*/
 controllers.controller('OeuvresCtrl', ['OeuvresRest', '$route', '$location',
     function (OeuvresRest, $route, $location) {
         var oeuvresCtrl = this;
@@ -90,7 +95,6 @@ controllers.controller('OeuvresCtrl', ['OeuvresRest', '$route', '$location',
          * Suppression d'une oeuvre
          * @param {type} id de l'oeuvre à supprimer
          */
-        
         function deleteOeuvre(id) {
             if (id) {
                 OeuvresRest.deleteOeuvre(id).success(function (data, status) {
@@ -107,6 +111,12 @@ controllers.controller('OeuvresCtrl', ['OeuvresRest', '$route', '$location',
     }
 ]);
 
+/**
+* Contrôleur de la page oeuvre.html
+* @param OeuvresRest
+* @param $routeParams
+* @param $location
+*/
 controllers.controller('OeuvreCtrl', ['OeuvresRest', '$routeParams', '$location',
     function (OeuvresRest, $routeParams, $location) {
         // Définition du scope
@@ -208,6 +218,12 @@ controllers.controller('OeuvreCtrl', ['OeuvresRest', '$routeParams', '$location'
     }
 ]);
 
+/**
+* Contrôleur de la page reservation.html
+* @param OeuvresRest
+* @param $routeParams
+* @param $location
+*/
 controllers.controller('ReservationCtrl', ['OeuvresRest', '$routeParams', '$location',
     function (OeuvresRest, $routeParams, $location) {
         // Définition du scope
@@ -286,6 +302,12 @@ controllers.controller('ReservationCtrl', ['OeuvresRest', '$routeParams', '$loca
     }
 ]);
 
+/**
+* Contrôleur de la page reservations.html
+* @param OeuvresRest
+* @param $route
+* @param $location
+*/
 controllers.controller('ReservationsCtrl', ['OeuvresRest', '$route', '$location',
     function (OeuvresRest, $route, $location) {
         var reservationsCtrl = this;
@@ -309,10 +331,9 @@ controllers.controller('ReservationsCtrl', ['OeuvresRest', '$route', '$location'
         
         /**
          * Suppression d'une réservation
-         * @param {type} id de l'oeuvre
-         * @param {type} date de la réservation
+         * @param {type} idOeuvre : id de l'oeuvre
+         * @param {type} dateReservation : date de la réservation
          */
-        
         function deleteReservation(idOeuvre, dateReservation) {
             if (idOeuvre && dateReservation) {
                 OeuvresRest.deleteReservation(idOeuvre, dateReservation).success(function (data, status) {
@@ -329,10 +350,9 @@ controllers.controller('ReservationsCtrl', ['OeuvresRest', '$route', '$location'
         
         /**
          * Confirmation d'une réservation
-         * @param {type} id de l'oeuvre
-         * @param {type} date de la réservation
+         * @param {type} idOeuvre : id de l'oeuvre
+         * @param {type} dateReservation : date de la réservation
          */
-        
         function confirmReservation(idOeuvre, dateReservation) {
             if (idOeuvre && dateReservation) {
                 OeuvresRest.confirmReservation(idOeuvre, dateReservation).success(function (data, status) {
@@ -346,6 +366,5 @@ controllers.controller('ReservationsCtrl', ['OeuvresRest', '$route', '$location'
                 });
             }
         }
-        
     }
 ]);

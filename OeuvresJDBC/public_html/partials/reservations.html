@@ -1,0 +1,40 @@
+<div>
+    <h1 class="text-center">Liste des réservations</h1>
+     <p ng-if="!reservationsCtrl.reservations.length">
+        Il n'y a actuellement aucune réservation.
+    </p>
+    <table ng-if="reservationsCtrl.reservations.length" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Date</th>
+                <th>Statut</th>
+                <th>Prénom adhérent</th>
+                <th>Nom adhérent</th>
+                <th>Confirmer</th>
+                <th>Supprimer</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="reservation in reservationsCtrl.reservations">
+                <td>{{reservation.oeuvre.titre}}</td>
+                <td>{{reservation.date_reservation | date:'dd/MM/yyyy'}}</td>
+                <td> {{reservation.statut}}</td>
+                <td> {{reservation.adherent.prenom_adherent}}</td>
+                <td> {{reservation.adherent.nom_adherent}}</td>    
+                <td>
+                     <button ng-disabled="CONFIRMEE===reservation.statut" class="btn btn-primary" confirm_click="reservationsCtrl.confirmReservation(reservation.oeuvre.id_oeuvre, reservation.date_reservation)" 
+                            ng-confirm-box-click="Souhaitez-vous vraiment confirmer la réservation ?">
+                        Confirmer
+                    </button>
+                </td>
+                <td>
+                    <button ng-disabled="CONFIRMEE===reservation.statut" class="btn btn-primary" confirm_click="reservationsCtrl.deleteReservation(reservation.oeuvre.id_oeuvre, reservation.date_reservation)" 
+                            ng-confirm-box-click="Souhaitez-vous confirmer la suppression ?">
+                        Supprimer
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

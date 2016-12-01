@@ -4,12 +4,9 @@
  */
 package outils;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Locale;
 
 /**
- *
  * @author alain
  */
 public class Utilitaire {

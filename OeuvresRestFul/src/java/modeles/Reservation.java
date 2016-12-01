@@ -5,12 +5,8 @@
 package modeles;
 
 import dao.*;
-import outils.*;
 import java.sql.*;
 import java.util.*;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 /**
  *
@@ -35,6 +31,8 @@ public class Reservation {
      *
      * @param id_oeuvre Id de l'oeuvre réservée
      * @param id_adherent Id de l'adhérent réservant
+     * @param date_reservation
+     * @param statut
      * @throws Exception
      */
     public Reservation(int id_oeuvre, int id_adherent, java.util.Date date_reservation, String statut) throws Exception {
@@ -99,7 +97,7 @@ public class Reservation {
      * Lecture d'une réservation sur id oeuvre et date
      * @param id id le l'oeuvre réservée
      * @param date_reservation date de la réservation
-     * @return
+     * @return Reservation
      * @throws Exception 
      */
     public Reservation lire(int id, java.util.Date date_reservation) throws Exception {
@@ -148,8 +146,7 @@ public class Reservation {
 
 
     /**
-     * liste des Réservations en Attente
-     *
+     * Liste des Réservations en Attente
      * @return List<Reservation> Collection de Réservations
      * @throws Exception
      */
@@ -194,7 +191,6 @@ public class Reservation {
 
     /**
      * Met à jour une Réservation dans la base de données
-     *
      * @throws Exception
      */
     public void modifier() throws Exception {
@@ -253,7 +249,6 @@ public class Reservation {
 
     /**
      * Insert une Réservation dans la base de données
-     *
      * @throws Exception
      */
     public void ajouter() throws Exception {
@@ -285,5 +280,4 @@ public class Reservation {
             }
         }
     }
-
 }

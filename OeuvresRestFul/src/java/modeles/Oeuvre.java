@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.json.JsonNumber;
 import javax.json.JsonObject;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
 public class Oeuvre {
 
@@ -26,7 +23,6 @@ public class Oeuvre {
 
     /**
      * Initialise le Propriétaire d'une oeuvre
-     *
      * @param id_proprietaire Id du propriétaire de l'oeuvre
      * @throws Exception
      */
@@ -79,8 +75,8 @@ public class Oeuvre {
     // </editor-fold>
     /**
      * Lecture d'une Oeuvre dans la base de données
-     *
      * @param id Id de l'oeuvre à lire
+     * @return Oeuvre
      * @throws Exception
      */
     public Oeuvre lire(int id) throws Exception {
@@ -119,8 +115,7 @@ public class Oeuvre {
     }
 
     /**
-     * liste des oeuvre
-     *
+     * Liste des oeuvre
      * @return List<Oeuvre> Collection d'oeuvres
      * @throws Exception
      */
@@ -159,6 +154,11 @@ public class Oeuvre {
         }
     }
 
+    /**
+     * Supprime une oeuvre
+     * @param id_oeuvre : Id de l'oeuvre
+     * @throws Exception
+     */
     public void supprimer(int id_oeuvre) throws Exception {
         PreparedStatement ps = null;
         Connection connection = null;
@@ -186,7 +186,6 @@ public class Oeuvre {
 
     /**
      * Met à jour une oeuvre dans la base de données
-     *
      * @throws Exception
      */
     public void modifier() throws Exception {
@@ -219,7 +218,6 @@ public class Oeuvre {
 
     /**
      * Insert une oeuvre dans la base de données
-     *
      * @throws Exception
      */
     public void ajouter() throws Exception {

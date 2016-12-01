@@ -10,7 +10,6 @@ import java.util.Set;
 import javax.ws.rs.core.Application;
 
 /**
- *
  * @author alain
  */
 @javax.ws.rs.ApplicationPath("webresources")
@@ -32,6 +31,5 @@ public class ApplicationConfig extends Application {
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(webservice.CORSFilter.class);
         resources.add(webservice.OeuvresResource.class);
-    }
-    
+    }   
 }

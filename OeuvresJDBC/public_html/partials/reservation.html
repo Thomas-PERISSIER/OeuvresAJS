@@ -1,0 +1,69 @@
+<div class="well">
+    <div class="text-center titre">
+        <h2>Réservation d'une oeuvre</h2>
+    </div>
+    <form class="form-horizontal" role="form" name="reservationForm">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Titre</label>
+            <label class="col-md-6 form-control-static">
+                {{reservationCtrl.oeuvre.titre}}
+            </label>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Prix</label>
+            <label class="col-md-6 form-control-static">
+                 {{reservationCtrl.oeuvre.prix}}
+            </label>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Date réservation</label>
+            <div class="col-sm-6 col-md-2">
+                <p class="input-group">
+                    <input type="text" class="form-control"
+                           datepicker-popup="dd/MM/yyyy"
+                           is-open="reservationCtrl.datePickerOpened"
+                           ng-click="reservationCtrl.openDatePicker()"
+                           ng-model="reservationCtrl.date_reservation" name="date_reservation"/>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" 
+                                ng-click="reservationCtrl.openDatePicker()">
+                          <i class="glyphicon glyphicon-calendar"></i>
+                        </button>
+                    </span>
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Adhérent</label>
+            <div class="col-sm-6 col-md-3">
+                <select class='form-control' name='adherents' required
+                        ng-options="option.nom_adherent for option in reservationCtrl.adherents track by option.id_adherent"
+                        ng-model="reservationCtrl.selectedOptionAdherent">
+                    <option value=''>Sélectionnez un adhérent</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
+                <button type="submit" class="btn btn-default btn-primary" 
+                        ng-click="reservationCtrl.validateReservation(reservationForm)">
+                    <span class="glyphicon glyphicon-ok"></span>
+                    Valider
+                </button>
+                &nbsp;
+                <button type="button" class="btn btn-default btn-primary" ng-click="reservationCtrl.cancel()">
+                    <span class="glyphicon glyphicon-remove"></span>
+                    Annuler
+                </button>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-6 col-sm-offset-3" ng-show="reservationCtrl.error">
+                <div class="alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    {{reservationCtrl.error}}
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

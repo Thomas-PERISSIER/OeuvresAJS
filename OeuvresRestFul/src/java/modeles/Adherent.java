@@ -36,7 +36,8 @@ public class Adherent {
     // </editor-fold>
     /**
      * Lecture d'un adhérent dans la base de données
-     * @param id Id de l'adhérent à lire
+     * @param id : Id de l'adhérent à lire
+     * @return Adherent
      * @throws Exception
      */
     public Adherent lire(int id) throws Exception {

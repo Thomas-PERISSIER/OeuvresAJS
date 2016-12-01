@@ -28,6 +28,8 @@ services.factory('Config', [function () {
 * service Config qui contient les urls du serveur RestFul.
 * Chaque méthode exposée retourne une promise qui
 * sera exploitée dans les contrôleurs
+* @param $http
+* @param Config
 */
 services.factory('OeuvresRest', ['$http', 'Config',
 function ($http, Config) {
@@ -105,6 +107,8 @@ function ($http, Config) {
     
 /**
  * Gestion de l'authentification
+ * @param $http
+*  @param Config
  */
 services.factory('Connection',
         function ($http, Config) {
@@ -117,7 +121,6 @@ services.factory('Connection',
             /**
              * Vérifie les valeurs fournies et retourne true ou false
              * @param login
-             * @param mdp
              * @returns {Boolean}
              */
             function getConnection(login) {

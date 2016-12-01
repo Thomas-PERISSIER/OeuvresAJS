@@ -60,6 +60,7 @@ public class Proprietaire {
     /**
      * Lecture d'un Propriétaire dans la base de données
      * @param id Id du Propriétaire à lire
+     * @return Proprietaire
      * @throws Exception
      */
     public Proprietaire lire(int id) throws Exception {
@@ -138,6 +139,13 @@ public class Proprietaire {
         }
     }
 
+    /**
+     * Se connecter
+     * @param login
+     * @param pwd
+     * @return boolean
+     * @throws Exception
+     */
     public boolean connecter(String login, String pwd) throws Exception {
         boolean retour = false;
         try {
